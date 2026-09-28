@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Christin Renni Philip — Cybersecurity Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f14;
+    --panel:#111820;
+    --panel-2:#0e141b;
+    --border:#22303c;
+    --accent:#9fef00;
+    --accent-dim:#6a9e10;
+    --teal:#2ee7b6;
+    --text:#c9d3dc;
+    --text-dim:#6b7c8c;
+    --danger:#ff4d5e;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:42px 42px;
+    background-attachment:fixed;
+    background-position:center;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:2;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.55) 100%);
+  }
+  ::selection{background:var(--accent);color:#0b0f14;}
+  a{color:var(--teal);text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  img{max-width:100%;}
+
+  /* ---- Top bar ---- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding-top:env(safe-area-inset-top,0px);
+    background:rgba(11,15,20,.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-wrap{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;}
+  .brand{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.02em;}
+  .brand span{color:var(--text-dim)}
+  nav ul{list-style:none;display:flex;gap:22px;margin:0;padding:0;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim);transition:color .15s;}
+  nav a:hover{color:var(--accent);}
+  .nav-toggle{display:none;background:none;border:1px solid var(--border);color:var(--accent);font-family:'JetBrains Mono',monospace;padding:6px 10px;border-radius:3px;}
+
+  @media (max-width:720px){
+    nav ul{position:fixed;top:calc(53px + env(safe-area-inset-top,0px));left:0;right:0;
+      background:var(--panel);border-bottom:1px solid var(--border);
+      flex-direction:column;padding:16px 24px;gap:14px;display:none;}
+    nav ul.open{display:flex;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---- Layout helpers ---- */
+  main{max-width:1040px;margin:0 auto;padding:0 24px;position:relative;z-index:3;}
+  section{padding:88px 0 40px;border-top:1px dashed var(--border);}
+  section:first-of-type{border-top:none;}
+  .tag{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:13px;}
+  .tag::before{content:"$ ";color:var(--text-dim);}
+  h2{font-family:'JetBrains Mono',monospace;font-size:26px;color:#fff;margin:6px 0 28px;font-weight:700;}
+  h2 .path{color:var(--text-dim);font-weight:400;}
+
+  /* ---- Terminal window chrome ---- */
+  .win{background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .win-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--panel-2);border-bottom:1px solid var(--border);}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+  .win-title{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);}
+  .win-body{padding:22px 24px;}
+
+  /* ---- Hero ---- */
+  #hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding-top:calc(88px + env(safe-area-inset-top,0px));
+    position:relative;border-top:none;
+  }
+  #matrix{position:absolute;inset:0;z-index:0;opacity:.35;}
+  .hero-inner{position:relative;z-index:2;width:100%;}
+  .prompt-line{font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:14px;margin-bottom:10px;}
+  .prompt-line b{color:var(--accent);}
+  h1{font-family:'JetBrains Mono',monospace;font-size:clamp(32px,6vw,58px);color:#fff;margin:0 0 6px;line-height:1.1;}
+  h1 .caret{display:inline-block;width:.5em;background:var(--accent);animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0}}
+  .role{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:18px;margin-bottom:22px;}
+  .lede{max-width:620px;color:var(--text);font-size:16px;margin-bottom:30px;}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:13px;padding:12px 20px;border-radius:4px;border:1px solid var(--accent);color:var(--accent);transition:.15s;}
+  .btn.solid{background:var(--accent);color:#0b0f14;font-weight:700;}
+  .btn:hover{background:var(--accent);color:#0b0f14;}
+  .btn.ghost{border-color:var(--border);color:var(--text-dim);}
+  .btn.ghost:hover{border-color:var(--teal);color:var(--teal);background:none;}
+
+  /* ---- About / stats ---- */
+  #about .win-body{display:grid;grid-template-columns:1.3fr 1fr;gap:34px;}
+  @media (max-width:720px){#about .win-body{grid-template-columns:1fr;}}
+  .out-line{margin:0 0 10px;color:var(--text);font-size:15px;}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start;}
+  .stat{border:1px solid var(--border);border-radius:5px;padding:14px;background:var(--panel-2);}
+  .stat b{display:block;font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:22px;}
+  .stat span{font-size:12px;color:var(--text-dim);}
+
+  /* ---- Skills ---- */
+  .skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:720px){.skill-grid{grid-template-columns:1fr;}}
+  .skill-cat{border:1px solid var(--border);border-radius:5px;padding:16px 18px;background:var(--panel-2);}
+  .skill-cat h3{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--teal);margin:0 0 10px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);border:1px solid var(--border);padding:4px 9px;border-radius:3px;background:#0b0f14;}
+
+  /* ---- Experience timeline ---- */
+  .tl{position:relative;padding-left:26px;}
+  .tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--border);}
+  .tl-item{position:relative;padding-bottom:30px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{content:"";position:absolute;left:-26px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);}
+  .tl-date{font-family:'JetBrains Mono',monospace;color:var(--accent-dim);font-size:12px;}
+  .tl-item h3{margin:4px 0 2px;font-size:16px;color:#fff;}
+  .tl-item .org{color:var(--text-dim);font-size:13px;margin-bottom:8px;}
+  .tl-item ul{margin:0;padding-left:18px;font-size:14px;color:var(--text);}
+  .tl-item li{margin-bottom:4px;}
+
+  /* ---- Education ---- */
+  .edu-item{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .edu-item:last-child{border-bottom:none;}
+  .edu-item h3{margin:0 0 3px;font-size:15px;color:#fff;}
+  .edu-item .org{font-size:13px;color:var(--text-dim);}
+  .edu-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-dim);white-space:nowrap;}
+
+  /* ---- Projects ---- */
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:900px){.proj-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:620px){.proj-grid{grid-template-columns:1fr;}}
+  .proj{border:1px solid var(--border);border-radius:6px;background:var(--panel-2);padding:18px;display:flex;flex-direction:column;}
+  .proj .badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--bg);background:var(--teal);padding:2px 7px;border-radius:3px;align-self:flex-start;margin-bottom:10px;letter-spacing:.03em;}
+  .proj h3{font-size:15px;color:#fff;margin:0 0 8px;}
+  .proj p{font-size:13px;color:var(--text-dim);flex:1;margin:0 0 12px;}
+  .proj .stack{display:flex;flex-wrap:wrap;gap:6px;}
+  .proj .stack span{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);border:1px solid var(--border);padding:2px 6px;border-radius:3px;}
+
+  /* ---- Languages ---- */
+  .lang-row{display:flex;flex-wrap:wrap;gap:22px;}
+  .lang{min-width:150px;}
+  .lang b{font-family:'JetBrains Mono',monospace;font-size:13px;color:#fff;display:block;margin-bottom:6px;}
+  .bar{height:6px;background:var(--panel-2);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+  .bar i{display:block;height:100%;background:var(--accent);}
+
+  /* ---- Contact / footer ---- */
+  #contact .win-body{display:flex;flex-direction:column;gap:14px;}
+  .contact-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--panel-2);border:1px solid var(--border);border-radius:5px;flex-wrap:wrap;gap:8px;}
+  .contact-row .k{font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:13px;}
+  .contact-row .v{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:13px;}
+  footer{text-align:center;padding:34px 20px calc(34px + env(safe-area-inset-bottom,0px));color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:12px;border-top:1px solid var(--border);position:relative;z-index:3;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand">christin<span>@</span>portfolio<span>:~$</span></div>
+    <button class="nav-toggle" id="navToggle">menu</button>
+    <nav><ul id="navList">
+      <li><a href="#about">whoami</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<section id="hero">
+  <canvas id="matrix"></canvas>
+  <main class="hero-inner">
+    <div class="prompt-line"><b>root@leipzig</b>:~# ./init_profile.sh</div>
+    <h1>Christin Renni Philip<span class="caret">&nbsp;</span></h1>
+    <div class="role">MSc Cybersecurity Candidate // Aspiring Security Analyst</div>
+    <p class="lede">BCA graduate building a foundation in penetration testing, malware analysis and network defense while pursuing an MSc in Computer Science (Cybersecurity) at SRH University, Leipzig. Comfortable moving between code, systems administration and the command line.</p>
+    <div class="btn-row">
+      <a href="#contact" class="btn solid">Get in touch</a>
+      <a href="#projects" class="btn ghost">View projects</a>
+    </div>
+  </main>
+</section>
+
+<main>
+
+  <section id="about">
+    <div class="tag">cat about.md</div>
+    <h2>whoami</h2>
+    <div class="win">
+      <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">about.md — read only</span></div>
+      <div class="win-body">
+        <div>
+          <p class="out-line">Bachelor of Computer Applications graduate currently pursuing an MSc in Computer Science (Cybersecurity) at SRH University, Leipzig, Germany.</p>
+          <p class="out-line">Strong foundation in software development, data analysis, agile methodologies and risk management, with hands-on exposure to penetration testing, malware analysis and network security.</p>
+          <p class="out-line">Built a modular Python-based data analysis toolkit as an academic project, sharpening analytical and problem-solving skills — now seeking to bring technical and organizational strengths to a cybersecurity or IT role in an international environment.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><b>3</b><span>professional roles held</span></div>
+          <div class="stat"><b>3</b><span>featured projects</span></div>
+          <div class="stat"><b>4</b><span>languages spoken</span></div>
+          <div class="stat"><b>91.75%</b><span>phishing model accuracy</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="tag">nmap --skills -sV</div>
+    <h2>skills <span class="path">/ competencies</span></h2>
+    <div class="skill-grid">
+      <div class="skill-cat"><h3>SECURITY</h3><div class="chips">
+        <span class="chip">Kali Linux</span><span class="chip">Black-box Pentesting</span><span class="chip">Malware Analysis</span><span class="chip">SNMP Enumeration</span><span class="chip">LDAP Enumeration</span><span class="chip">Risk Management</span>
+      </div></div>
+      <div class="skill-cat"><h3>NETWORKING &amp; SYSTEMS</h3><div class="chips">
+        <span class="chip">TCP/IP</span><span class="chip">DNS</span><span class="chip">DHCP</span><span class="chip">Active Directory</span><span class="chip">Windows Admin</span><span class="chip">Linux Admin</span>
+      </div></div>
+      <div class="skill-cat"><h3>PROGRAMMING &amp; DATA</h3><div class="chips">
+        <span class="chip">Python</span><span class="chip">PHP</span><span class="chip">Git / GitHub</span><span class="chip">Jupyter Notebook</span><span class="chip">Google Colab</span><span class="chip">Data Visualization</span>
+      </div></div>
+      <div class="skill-cat"><h3>TOOLS &amp; PROFESSIONAL</h3><div class="chips">
+        <span class="chip">Excel</span><span class="chip">PowerPoint</span><span class="chip">Documentation</span><span class="chip">Communication</span><span class="chip">Teamwork</span><span class="chip">Adaptability</span>
+      </div></div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="tag">tail -f experience.log</div>
+    <h2>experience <span class="path">/ timeline</span></h2>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-date">01/2025 – 11/2025</div>
+        <h3>IT Support Assistant</h3>
+        <div class="org">Limbdi Ayurvedic College and General Hospital</div>
+        <ul>
+          <li>Maintained and troubleshot hospital computer systems, including biometric monitoring equipment, to support uninterrupted clinical and administrative operations.</li>
+          <li>Provided day-to-day hardware and software support to staff, resolving system issues and minimizing downtime.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">11/2024 – 01/2025</div>
+        <h3>Sales Associate</h3>
+        <div class="org">Max Fashion — Ernakulam, Kerala, India</div>
+        <ul>
+          <li>Consistently exceeded monthly sales targets through strong customer service and product knowledge in a fast-paced retail environment.</li>
+          <li>Built rapport with customers and handled queries and transactions efficiently during high-traffic periods.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">09/2023 – 01/2024</div>
+        <h3>Cybersecurity Intern</h3>
+        <div class="org">Skolar</div>
+        <ul>
+          <li>Completed a 3-month cybersecurity internship mentored by Ranjhan Raja, gaining hands-on exposure to core security concepts and practices.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="tag">cat education.yaml</div>
+    <h2>education</h2>
+    <div class="win">
+      <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">education.yaml</span></div>
+      <div class="win-body" style="padding:6px 24px;">
+        <div class="edu-item"><div><h3>MSc in Computer Science (Cybersecurity)</h3><div class="org">SRH University, Leipzig, Germany</div></div><div class="edu-date">04/2026 – Present</div></div>
+        <div class="edu-item"><div><h3>Bachelor of Computer Applications (BCA)</h3><div class="org"></div></div><div class="edu-date">11/2021 – 01/2025</div></div>
+        <div class="edu-item"><div><h3>Class XII</h3><div class="org">Central Board of Secondary Education</div></div><div class="edu-date">07/2020 – 03/2021</div></div>
+        <div class="edu-item"><div><h3>Class X</h3><div class="org">Central Board of Secondary Education</div></div><div class="edu-date">05/2018 – 03/2019</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="tag">ls -la ./projects</div>
+    <h2>projects</h2>
+    <div class="proj-grid">
+      <div class="proj">
+        <span class="badge">DATA</span>
+        <h3>Data Analysis Toolkit</h3>
+        <p>Modular Python toolkit for data exploration, descriptive statistics, visualization and probability distributions, with normality testing (Shapiro-Wilk, Kolmogorov-Smirnov, Anderson-Darling) and automated PDF report generation.</p>
+        <div class="stack"><span>Python</span><span>Statistics</span><span>PDF Reports</span></div>
+      </div>
+      <div class="proj">
+        <span class="badge">SECURITY</span>
+        <h3>Phishing Detection via NLP &amp; Deep Learning</h3>
+        <p>3-member major project combining NLP text preprocessing with a deep learning classifier to flag phishing emails, integrated with the Gmail IMAP server for real-time classification. Achieved 91.75% test accuracy over 50 epochs.</p>
+        <div class="stack"><span>Python</span><span>Django</span><span>MySQL</span><span>Deep Learning</span></div>
+      </div>
+      <div class="proj">
+        <span class="badge">WEB</span>
+        <h3>Child Vaccination Reminder System</h3>
+        <p>Responsive webpage helping parents track and stay notified of upcoming vaccination schedules, built as a third-semester mini project.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="languages">
+    <div class="tag">locale --list</div>
+    <h2>languages</h2>
+    <div class="lang-row">
+      <div class="lang"><b>English</b><div class="bar"><i style="width:95%"></i></div></div>
+      <div class="lang"><b>Hindi</b><div class="bar"><i style="width:95%"></i></div></div>
+      <div class="lang"><b>Malayalam</b><div class="bar"><i style="width:95%"></i></div></div>
+      <div class="lang"><b>German</b><div class="bar"><i style="width:30%"></i></div></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="tag">./connect --secure</div>
+    <h2>contact</h2>
+    <div class="win">
+      <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">connection established — encrypted channel</span></div>
+      <div class="win-body">
+        <div class="contact-row"><span class="k">email</span><a class="v" href="mailto:christinrenni123987@gmail.com">christinrenni123987@gmail.com</a></div>
+        <div class="contact-row"><span class="k">phone</span><a class="v" href="tel:+4915510289036">+49 15510289036</a></div>
+        <div class="contact-row"><span class="k">location</span><span class="v">Leipzig, Saxony, Germany</span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>&copy; 2026 Christin Renni Philip — built on the command line, deployed to the web.</footer>
+
+<script>
+// subtle matrix rain in hero canvas only
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+let w, h, cols, drops;
+const chars = "01アイウエオカキクケコ$#@&%".split("");
+function resize(){
+  w = canvas.width = canvas.offsetWidth;
+  h = canvas.height = canvas.offsetHeight;
+  cols = Math.floor(w / 18);
+  drops = new Array(cols).fill(0).map(()=>Math.random()*-50);
+}
+resize();
+window.addEventListener('resize', resize);
+function draw(){
+  ctx.fillStyle = 'rgba(11,15,20,0.08)';
+  ctx.fillRect(0,0,w,h);
+  ctx.fillStyle = '#9fef00';
+  ctx.font = '15px monospace';
+  for(let i=0;i<cols;i++){
+    const text = chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(text, i*18, drops[i]*18);
+    if(drops[i]*18 > h && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navList = document.getElementById('navList');
+navToggle.addEventListener('click', ()=> navList.classList.toggle('open'));
+navList.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=> navList.classList.remove('open')));
+</script>
+</body>
+</html>
